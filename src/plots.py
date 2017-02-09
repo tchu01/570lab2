@@ -85,7 +85,6 @@ class Victims:
 
     def get_random_instance_by_attribute(self, musician, actor, athlete):
         instances = self.get_instances_by_attribute(musician, actor, athlete)
-        print('picking from... ' + str(instances))
         return random.choice(instances)
 
 
@@ -162,7 +161,41 @@ class Symptoms:
 
 class PlotFragments:
     def __init__(self):
-        pass
+        self.instances = {'device': {'empirical': True,
+                                    'curious': True,
+                                    'funny': True,
+                                    'rash': True},
+                          'experiments': {'empirical': True,
+                                    'curious': True,
+                                    'funny': True,
+                                    'rash': True},
+                          'epiphany': {'empirical': True,
+                                    'curious': True,
+                                    'funny': True,
+                                    'rash': True},
+                          'location_activity': {'empirical': True,
+                                    'curious': True,
+                                    'funny': True,
+                                    'rash': True},
+                          'past_family_history': {'empirical': True,
+                                    'curious': True,
+                                    'funny': True,
+                                    'rash': True},
+                          'recall_similar_situation': {'empirical': True,
+                                    'curious': True,
+                                    'funny': True,
+                                    'rash': True},
+                          'risking_treatment': {'empirical': True,
+                                    'curious': True,
+                                    'funny': True,
+                                    'rash': True},
+                          'death': {'empirical': True,
+                                    'curious': True,
+                                    'funny': True,
+                                    'rash': True}}
+
+    def get_random_instance(self):
+        return random.choice(self.instances)
 
 
 class PlotGenerator:
@@ -180,16 +213,20 @@ class PlotGenerator:
         self.locations = Locations()
         self.problems = Problems()
         self.symptoms = Symptoms()
+        self.plot_fragments = PlotFragments()
 
     def generate(self):
         print("Generated Plot:")
 
         location = self.locations.get_random_instance()
-        print(location)
+        print('LOCATION: ' + str(location))
 
         musician, actor, athlete = self.locations.get_instance_attributes(location)
         victims = self.victims.get_random_instance_by_attribute(musician, actor, athlete)
-        print(victims)
+        print('VICTIM: ' + str(victims))
+
+        plot = self.plot_fragments.get_random_instance()
+        print('PLOT FRAGMENT: ' + str(plot))
 
 
 if __name__ == '__main__':
