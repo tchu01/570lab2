@@ -29,6 +29,27 @@ class Solvers:
                                     'funny': True,
                                     'rash': False}}
 
+    def get_instances_by_attribute(self, empirical, curious, funny, rash):
+        ret = []
+        for key in self.instances.keys():
+            if empirical == True:
+                if self.instances[key]['empirical'] == True:
+                    ret.append(key)
+            if curious == True:
+                if self.instances[key]['curious'] == True:
+                    ret.append(key)
+            if funny == True:
+                if self.instances[key]['funny'] == True:
+                    ret.append(key)
+            if rash == True:
+                if self.instances[key]['rash'] == True:
+                    ret.append(key)
+        return ret
+
+    def get_random_instance_by_attribute(self, empirical, curious, funny, rash):
+        instances = self.get_instances_by_attribute(empirical, curious, funny, rash)
+        return random.choice(instances)
+
 
 class Victims:
     def __init__(self):
@@ -181,8 +202,11 @@ class Locations:
         return random.choice(instances)
 
     def get_instance_attributes(self, instance):
-        return self.instances[instance]['musician'], self.instances[instance]['actor'], self.instances[instance][
-            'athlete'],
+        musician = self.instances[instance]['musician']
+        actor = self.instances[instance]['actor']
+        athlete = self.instances[instance]['athlete']
+
+        return musician, actor, athlete
 
 
 class Problems:
@@ -371,7 +395,15 @@ class PlotFragments:
                                     'rash': True}}
 
     def get_random_instance(self):
-        return random.choice(self.instances)
+        return random.choice(list(self.instances.keys()))
+
+    def get_instance_attributes(self, instance):
+        empirical = self.instances[instance]['empirical']
+        curious = self.instances[instance]['curious']
+        funny = self.instances[instance]['funny']
+        rash = self.instances[instance]['rash']
+
+        return empirical, curious, funny, rash
 
 
 class PlotGenerator:
@@ -395,14 +427,18 @@ class PlotGenerator:
         print("Generated Plot:")
 
         location = self.locations.get_random_instance()
-        print('LOCATION: ' + str(location))
+        print('LOCATION:        ' + str(location))
 
         musician, actor, athlete = self.locations.get_instance_attributes(location)
         victims = self.victims.get_random_instance_by_attribute(musician, actor, athlete)
-        print('VICTIM: ' + str(victims))
+        print('VICTIM:          ' + str(victims))
 
         plot = self.plot_fragments.get_random_instance()
-        print('PLOT FRAGMENT: ' + str(plot))
+        print('PLOT FRAGMENT:   ' + str(plot))
+
+        empirical, curious, funny, rash = self.plot_fragments.get_instance_attributes(plot)
+        solver = self.solvers.get_random_instance_by_attribute(empirical, curious, funny, rash)
+        print('SOLVER:          ' + str(solver))
 
 
 if __name__ == '__main__':
