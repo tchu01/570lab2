@@ -1,9 +1,15 @@
 import sys
 import json
 import random
+import string
 
 
 class Solvers:
+    EMPIRICAL = 'empirical'
+    CURIOUS = 'curious'
+    FUNNY = 'funny'
+    RASH = 'rash'
+
     def __init__(self):
         with open('solvers.json') as data_file:
             self.instances = json.load(data_file)
@@ -12,16 +18,16 @@ class Solvers:
         ret = []
         for key in self.instances.keys():
             if empirical == True:
-                if self.instances[key]['empirical'] == True:
+                if self.instances[key][self.EMPIRICAL] == True:
                     ret.append(key)
             if curious == True:
-                if self.instances[key]['curious'] == True:
+                if self.instances[key][self.CURIOUS] == True:
                     ret.append(key)
             if funny == True:
-                if self.instances[key]['funny'] == True:
+                if self.instances[key][self.FUNNY] == True:
                     ret.append(key)
             if rash == True:
-                if self.instances[key]['rash'] == True:
+                if self.instances[key][self.RASH] == True:
                     ret.append(key)
         return ret
 
@@ -31,6 +37,10 @@ class Solvers:
 
 
 class Victims:
+    MUSICIAN = 'musician'
+    ACTOR = 'actor'
+    ATHLETE = 'athlete'
+
     def __init__(self):
         with open('victims.json') as data_file:
             self.instances = json.load(data_file)
@@ -39,13 +49,13 @@ class Victims:
         ret = []
         for key in self.instances.keys():
             if musician == True:
-                if self.instances[key]['musician'] == True:
+                if self.instances[key][self.MUSICIAN] == True:
                     ret.append(key)
             if actor == True:
-                if self.instances[key]['actor'] == True:
+                if self.instances[key][self.ACTOR] == True:
                     ret.append(key)
             if athlete == True:
-                if self.instances[key]['athlete'] == True:
+                if self.instances[key][self.ATHLETE] == True:
                     ret.append(key)
         return ret
 
@@ -55,6 +65,10 @@ class Victims:
 
 
 class Locations:
+    MUSICIAN = 'musician'
+    ACTOR = 'actor'
+    ATHLETE = 'athlete'
+
     def __init__(self):
         with open('locations.json') as data_file:
             self.instances = json.load(data_file)
@@ -65,14 +79,17 @@ class Locations:
         return random.choice(instances)
 
     def get_instance_attributes(self, instance):
-        musician = self.instances[instance]['musician']
-        actor = self.instances[instance]['actor']
-        athlete = self.instances[instance]['athlete']
+        musician = self.instances[instance][self.MUSICIAN]
+        actor = self.instances[instance][self.ACTOR]
+        athlete = self.instances[instance][self.ATHLETE]
 
         return musician, actor, athlete
 
 
 class Problems:
+    QUICKLY_CURABLE = 'quickly_curable'
+    FAST_ACTING = 'fast_acting'
+
     def __init__(self):
         with open('problems.json') as data_file:
             self.instances = json.load(data_file)
@@ -83,13 +100,17 @@ class Problems:
         return random.choice(instances)
 
     def get_instance_attributes(self, instance):
-        quickly_curable = self.instances[instance]['quickly_curable']
-        fast_acting = self.instances[instance]['fast_acting']
+        quickly_curable = self.instances[instance][self.QUICKLY_CURABLE]
+        fast_acting = self.instances[instance][self.FAST_ACTING]
 
         return quickly_curable, fast_acting
 
 
 class Symptoms:
+    LOW = 'low_severity'
+    MEDIUM = 'medium_severity'
+    HIGH = 'high_severity'
+
     def __init__(self):
         with open('symptoms.json') as data_file:
             self.instances = json.load(data_file)
@@ -99,11 +120,11 @@ class Symptoms:
         medium = []
         high = []
         for symptom in self.instances.keys():
-            if self.instances[symptom]['low_severity'] == True:
+            if self.instances[symptom][self.LOW] == True:
                 low.append(symptom)
-            if self.instances[symptom]['medium_severity'] == True:
+            if self.instances[symptom][self.MEDIUM] == True:
                 medium.append(symptom)
-            if self.instances[symptom]['high_severity'] == True:
+            if self.instances[symptom][self.HIGH] == True:
                 high.append(symptom)
 
         num_low = 0
@@ -131,6 +152,11 @@ class Symptoms:
 
 
 class PlotFragments:
+    EMPIRICAL = 'empirical'
+    CURIOUS = 'curious'
+    FUNNY = 'funny'
+    RASH = 'rash'
+
     def __init__(self):
         with open('plotfragments.json') as data_file:
             self.instances = json.load(data_file)
@@ -139,10 +165,10 @@ class PlotFragments:
         return random.choice(list(self.instances.keys()))
 
     def get_instance_attributes(self, instance):
-        empirical = self.instances[instance]['empirical']
-        curious = self.instances[instance]['curious']
-        funny = self.instances[instance]['funny']
-        rash = self.instances[instance]['rash']
+        empirical = self.instances[instance][self.EMPIRICAL]
+        curious = self.instances[instance][self.CURIOUS]
+        funny = self.instances[instance][self.FUNNY]
+        rash = self.instances[instance][self.RASH]
 
         return empirical, curious, funny, rash
 
@@ -164,75 +190,62 @@ class PlotGenerator:
         self.symptoms = Symptoms()
         self.plot_fragments = PlotFragments()
 
+        with open('templates.json') as data_file:
+            self.templates = json.load(data_file)
+
     def run(self):
-        print("Basic Generated Plot:")
-
         location = self.locations.get_random_instance()
-        print('LOCATION:        ' + str(location))
-
         musician, actor, athlete = self.locations.get_instance_attributes(location)
         victim = self.victims.get_random_instance_by_attributes(musician, actor, athlete)
-        print('VICTIM:          ' + str(victim))
-
         plot = self.plot_fragments.get_random_instance()
-        print('PLOT FRAGMENT:   ' + str(plot))
-
         empirical, curious, funny, rash = self.plot_fragments.get_instance_attributes(plot)
         solver = self.solvers.get_random_instance_by_attributes(empirical, curious, funny, rash)
-        print('SOLVER:          ' + str(solver))
-
         problem = self.problems.get_random_instance()
-        print('PROBLEM:         ' + str(problem))
-
         quickly_curable, fast_acting = self.problems.get_instance_attributes(problem)
         symptoms = self.symptoms.get_random_instances_by_attributes(quickly_curable, fast_acting)
-        print('SYMPTOMS:        ' + str(symptoms))
 
-        print("\nMedium Generated Plot:")
-        print("In this episode, <<<" + str(victim) + ">>> suddenly experiences <<<" + str(symptoms) + ">>>")
-        print("while at <<<" + location + ">>>. (S)he is taken to the hospital, where the doctors try to diagnose")
-        print("the problem. <<<" + str(solver) + ">>> finally use/look <<<" + str(plot) + ">>>")
-        print("to discover that the problem was <<<" + str(problem) + ">>>.")
+        # print("Basic Generated Plot:")
+        # print('PLOT FRAGMENT:   ' + str(plot))
+        # print('SOLVER:          ' + str(solver))
+        # print('VICTIM:          ' + str(victim))
+        # print('LOCATION:        ' + str(location))
+        # print('PROBLEM:         ' + str(problem))
+        # print('SYMPTOMS:        ' + str(symptoms))
+        #
+        # print("\nMedium Generated Plot:")
+        # print("In this episode, <<<" + str(victim) + ">>> suddenly experiences <<<" + str(symptoms) + ">>>")
+        # print("while at <<<" + location + ">>>. (S)he is taken to the hospital, where the doctors try to diagnose")
+        # print("the problem. <<<" + str(solver) + ">>> finally use/look <<<" + str(plot) + ">>>")
+        # print("to discover that the problem was <<<" + str(problem) + ">>>.\n")
+
+        self.generate(location, victim, plot, solver, problem, symptoms)
 
     def generate(self, location, victim, plot, solver, problem, symptoms):
-        if plot == 'device':
-            pass
-        elif plot == 'multiple_experiments':
-            pass
-        elif plot == 'epiphany_hearing_something':
-            pass
-        elif plot == 'epiphany_seeing_something':
-            pass
-        elif plot == 'epiphany_smelling_something':
-            pass
-        elif plot == 'location_activity':
-            pass
-        elif plot == 'past_family_history':
-            pass
-        elif plot == 'scour_journals':
-            pass
-        elif plot == 'consult_other_doctors':
-            pass
-        elif plot == 'ancient_techniques':
-            pass
-        elif plot == 'state_of_art_technique':
-            pass
-        elif plot == 'recall_similar_problem':
-            pass
-        elif plot == 'doctor_gets_similar_problem':
-            pass
-        elif plot == 'watch_another_doctor_show':
-            pass
-        elif plot == 'risking_treatment':
-            pass
-        elif plot == 'accidentally_apply_correct_treatment':
-            pass
-        elif plot == 'realize_smaller_problems':
-            pass
-        elif plot == 'death':
-            pass
+        print("\nComplicated Generated Plot:")
+        plotkey = None
+        specific_plot = None
+        for plotkey in self.templates:
+            if plot in self.templates[plotkey]:
+                break
 
+        summary = self.templates[plotkey]['summary']
+        summary = str(summary).replace("#SOLVER#", solver)
+        summary = str(summary).replace("#VICTIM#", victim)
+        summary = str(summary).replace("#LOCATION#", location)
+        summary = str(summary).replace("#PROBLEM#", problem)
+        summary = str(summary).replace("#PLOTFRAG#", self.templates[plotkey][plot])
+
+        if len(symptoms) < 3:
+            string_symptoms = symptoms[0] + " and " + symptoms[1]
+        else:
+            string_symptoms = ", ".join(symptoms[:-1])
+            string_symptoms += ", and " + str(symptoms[-1])
+
+        summary = str(summary).replace("#SYMPTOMS#", string_symptoms)
+
+        print("Summary: " + str(summary))
 
 if __name__ == '__main__':
     generator = PlotGenerator()
-    generator.run()
+    for i in range(1):
+        generator.run()
