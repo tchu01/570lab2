@@ -56,7 +56,7 @@
     "sensitivity": {"low_severity": true,
                     "medium_severity": false,
                     "high_severity": false},
-    "rashs": {"low_severity": true,
+    "rashes": {"low_severity": true,
              "medium_severity": false,
              "high_severity": false}
 }

@@ -193,6 +193,9 @@ class PlotGenerator:
         with open('templates.json') as data_file:
             self.templates = json.load(data_file)
 
+        with open('choices.json') as data_file:
+            self.choices = json.load(data_file)
+
     def run(self):
         location = self.locations.get_random_instance()
         musician, actor, athlete = self.locations.get_instance_attributes(location)
@@ -221,7 +224,7 @@ class PlotGenerator:
         self.generate(location, victim, plot, solver, problem, symptoms)
 
     def generate(self, location, victim, plot, solver, problem, symptoms):
-        print("\nComplicated Generated Plot:")
+        # print("\nComplicated Generated Plot:")
         plotkey = None
         specific_plot = None
         for plotkey in self.templates:
@@ -233,7 +236,6 @@ class PlotGenerator:
         summary = str(summary).replace("#VICTIM#", victim)
         summary = str(summary).replace("#LOCATION#", location)
         summary = str(summary).replace("#PROBLEM#", problem)
-        summary = str(summary).replace("#PLOTFRAG#", self.templates[plotkey][plot])
 
         if len(symptoms) < 3:
             string_symptoms = symptoms[0] + " and " + symptoms[1]
@@ -242,8 +244,17 @@ class PlotGenerator:
             string_symptoms += ", and " + str(symptoms[-1])
 
         summary = str(summary).replace("#SYMPTOMS#", string_symptoms)
+        string_plot = self.templates[plotkey][plot]
+        string_plot = str(string_plot).replace("#SOLVER#", solver)
+        string_plot = str(string_plot).replace("#VICTIM#", victim)
+        string_plot = str(string_plot).replace("#LOCATION#", location)
+        summary = str(summary).replace("#PLOTFRAG#", string_plot)
 
-        print("Summary: " + str(summary))
+        if plot in self.choices:
+            choice = random.choice(self.choices[plot])
+            summary = str(summary).replace("#CHOICE#", choice)
+
+        print(summary)
 
 if __name__ == '__main__':
     generator = PlotGenerator()

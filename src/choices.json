@@ -1,0 +1,5 @@
+{
+    "device": ["an x-ray", "a MRI-scan", "a microscope", "a virtual simulator"],
+    "multiple_experiments": ["blood tests", "allergy tests", "isolate protein tests"]
+
+}
