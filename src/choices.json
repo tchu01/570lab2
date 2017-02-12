@@ -1,5 +1,5 @@
 {
     "device": ["an x-ray", "a MRI-scan", "a microscope", "a virtual simulator"],
-    "multiple_experiments": ["blood tests", "allergy tests", "isolate protein tests"]
-
+    "multiple_experiments": ["blood tests", "allergy tests", "isolate protein tests"],
+    "location_activity": ["try an unconventional approach of stalking the patients location and activity to determine the source of the problem. Luckily, #SOLVER# stumbles across an obvious clue which leads to a diagnosis", "interrogate #VICTIM# to determine exactly where or what could have caused the problem. #VICTIM# rattles something off which was thought to be insignificant, but it causes #SOLVER# to realize the problem"]
 }
