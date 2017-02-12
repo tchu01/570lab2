@@ -1,4 +1,3 @@
-import sys
 import json
 import random
 
@@ -206,20 +205,6 @@ class PlotGenerator:
         quickly_curable, fast_acting = self.problems.get_instance_attributes(problem)
         symptoms = self.symptoms.get_random_instances_by_attributes(quickly_curable, fast_acting)
 
-        # print("Basic Generated Plot:")
-        # print('PLOT FRAGMENT:   ' + str(plot))
-        # print('SOLVER:          ' + str(solver))
-        # print('VICTIM:          ' + str(victim))
-        # print('LOCATION:        ' + str(location))
-        # print('PROBLEM:         ' + str(problem))
-        # print('SYMPTOMS:        ' + str(symptoms))
-        #
-        # print("\nMedium Generated Plot:")
-        # print("In this episode, <<<" + str(victim) + ">>> suddenly experiences <<<" + str(symptoms) + ">>>")
-        # print("while at <<<" + location + ">>>. (S)he is taken to the hospital, where the doctors try to diagnose")
-        # print("the problem. <<<" + str(solver) + ">>> finally use/look <<<" + str(plot) + ">>>")
-        # print("to discover that the problem was <<<" + str(problem) + ">>>.\n")
-
         self.generate(location, victim, plot, solver, problem, symptoms)
 
     def generate(self, location, victim, plot, solver, problem, symptoms):
@@ -227,8 +212,6 @@ class PlotGenerator:
         for plotkey in self.templates:
             if plot in self.templates[plotkey]:
                 break
-
-        print(plot)
 
         summary = self.templates[plotkey]['summary']
         if len(symptoms) < 3:
@@ -239,9 +222,6 @@ class PlotGenerator:
         summary = str(summary).replace("#SYMPTOMS#", string_symptoms)
 
         string_plot = self.templates[plotkey][plot]
-        # string_plot = str(string_plot).replace("#SOLVER#", solver)
-        # string_plot = str(string_plot).replace("#VICTIM#", victim)
-        # string_plot = str(string_plot).replace("#LOCATION#", location)
         summary = str(summary).replace("#PLOTFRAG#", string_plot)
 
         if plot in self.choices:
@@ -254,6 +234,7 @@ class PlotGenerator:
         summary = str(summary).replace("#PROBLEM#", problem)
 
         print(summary)
+
 
 if __name__ == '__main__':
     generator = PlotGenerator()
