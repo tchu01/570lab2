@@ -50,7 +50,7 @@
     "at the plastic surgery hospital": {"musician": true,
                                  "actor": true,
                                  "athlete": false},
-    "at the Grammy’s": {"musician": true,
+    "at the Grammys": {"musician": true,
                  "actor": true,
                  "athlete": false},
     "at the studio": {"musician": true,

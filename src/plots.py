@@ -1,7 +1,6 @@
 import sys
 import json
 import random
-import string
 
 
 class Solvers:
@@ -224,39 +223,44 @@ class PlotGenerator:
         self.generate(location, victim, plot, solver, problem, symptoms)
 
     def generate(self, location, victim, plot, solver, problem, symptoms):
-        # print("\nComplicated Generated Plot:")
         plotkey = None
-        specific_plot = None
         for plotkey in self.templates:
             if plot in self.templates[plotkey]:
                 break
 
-        summary = self.templates[plotkey]['summary']
-        summary = str(summary).replace("#SOLVER#", solver)
-        summary = str(summary).replace("#VICTIM#", victim)
-        summary = str(summary).replace("#LOCATION#", location)
-        summary = str(summary).replace("#PROBLEM#", problem)
+        print(plot)
 
+        summary = self.templates[plotkey]['summary']
         if len(symptoms) < 3:
             string_symptoms = symptoms[0] + " and " + symptoms[1]
         else:
             string_symptoms = ", ".join(symptoms[:-1])
             string_symptoms += ", and " + str(symptoms[-1])
-
         summary = str(summary).replace("#SYMPTOMS#", string_symptoms)
+
         string_plot = self.templates[plotkey][plot]
-        string_plot = str(string_plot).replace("#SOLVER#", solver)
-        string_plot = str(string_plot).replace("#VICTIM#", victim)
-        string_plot = str(string_plot).replace("#LOCATION#", location)
+        # string_plot = str(string_plot).replace("#SOLVER#", solver)
+        # string_plot = str(string_plot).replace("#VICTIM#", victim)
+        # string_plot = str(string_plot).replace("#LOCATION#", location)
         summary = str(summary).replace("#PLOTFRAG#", string_plot)
 
         if plot in self.choices:
             choice = random.choice(self.choices[plot])
             summary = str(summary).replace("#CHOICE#", choice)
 
+        summary = str(summary).replace("#SOLVER#", solver)
+        summary = str(summary).replace("#VICTIM#", victim)
+        summary = str(summary).replace("#LOCATION#", location)
+        summary = str(summary).replace("#PROBLEM#", problem)
+
         print(summary)
 
 if __name__ == '__main__':
     generator = PlotGenerator()
-    for i in range(1):
-        generator.run()
+    done = False
+    while not done:
+        try:
+            generator.run()
+            done = True
+        except:
+            pass
